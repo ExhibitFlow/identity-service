@@ -1,0 +1,50 @@
+spring:
+  application:
+    name: identity-service-test
+  
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password: 
+    driver-class-name: org.h2.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+  
+  flyway:
+    enabled: false
+  
+  kafka:
+    bootstrap-servers: ${spring.embedded.kafka.brokers}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: earliest
+      properties:
+        spring.json.trusted.packages: '*'
+
+jwt:
+  secret: test-secret-key-for-jwt-tokens-at-least-256-bits-long-for-hmac-sha256
+  expiration: 3600000
+  refresh-expiration: 7200000
+
+oauth2:
+  issuer-uri: http://localhost:8080/api/v1
+  client:
+    client-id: test-client
+    client-secret: test-secret
+    redirect-uris: http://localhost:3000/callback
+    scopes: openid,profile,email
+
+logging:
+  level:
+    root: INFO
+    com.exhibitflow.identity: DEBUG
