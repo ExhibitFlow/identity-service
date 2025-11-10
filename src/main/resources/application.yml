@@ -3,9 +3,9 @@ spring:
     name: identity-service
   
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/identitydb}
-    username: ${DB_USERNAME:identity_user}
-    password: ${DB_PASSWORD:identity_pass}
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 10
@@ -13,7 +13,10 @@ spring:
       connection-timeout: 30000
       idle-timeout: 600000
       max-lifetime: 1800000
-  
+      data-source-properties:
+        ssl: true
+        sslmode: require
+
   jpa:
     hibernate:
       ddl-auto: validate
@@ -95,19 +98,12 @@ jwt:
   refresh-expiration: ${JWT_REFRESH_EXPIRATION:604800000}
 
 oauth2:
-  issuer-uri: ${OAUTH2_ISSUER_URI:http://localhost:8080/api/v1}
+  issuer-uri: ${OAUTH2_ISSUER_URI}
   client:
-    client-id: ${OAUTH2_CLIENT_ID:identity-service-client}
-    client-secret: ${OAUTH2_CLIENT_SECRET:secret}
-    redirect-uris:
-      - http://localhost:3000/callback
-      - http://localhost:8081/login/oauth2/code/identity-service
-    scopes:
-      - openid
-      - profile
-      - email
-      - read
-      - write
+    client-id: ${OAUTH2_CLIENT_ID}
+    client-secret: ${OAUTH2_CLIENT_SECRET}
+    redirect-uris: ${OAUTH2_REDIRECT_URIS}
+    scopes: ${OAUTH2_SCOPES}
 
 logging:
   level:

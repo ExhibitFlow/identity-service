@@ -1,24 +1,6 @@
 version: '3.8'
 
 services:
-  postgres:
-    image: postgres:16-alpine
-    container_name: identity-postgres
-    environment:
-      POSTGRES_DB: identitydb
-      POSTGRES_USER: identity_user
-      POSTGRES_PASSWORD: identity_pass
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - identity-network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U identity_user -d identitydb"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
   kafka:
     image: confluentinc/cp-kafka:7.5.0
@@ -59,16 +41,14 @@ services:
       dockerfile: Dockerfile
     container_name: identity-service
     depends_on:
-      postgres:
-        condition: service_healthy
       kafka:
         condition: service_healthy
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/identitydb
-      DB_USERNAME: identity_user
-      DB_PASSWORD: identity_pass
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
       JWT_SECRET: your-super-secure-256-bit-secret-key-for-jwt-tokens-change-in-production
       SERVER_PORT: 8080
@@ -76,8 +56,6 @@ services:
       - identity-network
     restart: unless-stopped
 
-volumes:
-  postgres_data:
 
 networks:
   identity-network:
