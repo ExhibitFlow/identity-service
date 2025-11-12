@@ -43,7 +43,7 @@ VALUES (
     gen_random_uuid(),
     'admin',
     'admin@exhibitflow.com',
-    '$2a$10$xXEZqNzKQUzkkAQnGn3YV.0cjnNVDHCxQ3J2z3kZHZ8UhxXqZKx5C',
+    '$2a$10$7WNbrw0pYCdp9lSv8VhPqeGTuObJkVtggzUNmhlst7UQ4OYBwLEpm',
     'Admin',
     'User',
     TRUE,
