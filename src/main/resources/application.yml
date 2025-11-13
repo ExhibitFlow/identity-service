@@ -36,23 +36,23 @@ spring:
     locations: classpath:db/migration
     schemas: public
   
-  kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-      acks: all
-      retries: 3
-    consumer:
-      group-id: identity-service-group
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-      auto-offset-reset: earliest
-      properties:
-        spring.json.trusted.packages: '*'
-    topics:
-      user-events: user-events
-      auth-events: auth-events
+  # kafka:
+  #   bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+  #   producer:
+  #     key-serializer: org.apache.kafka.common.serialization.StringSerializer
+  #     value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+  #     acks: all
+  #     retries: 3
+  #   consumer:
+  #     group-id: identity-service-group
+  #     key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  #     value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+  #     auto-offset-reset: earliest
+  #     properties:
+  #       spring.json.trusted.packages: '*'
+  #   topics:
+  #     user-events: user-events
+  #     auth-events: auth-events
 
 server:
   port: ${SERVER_PORT:8080}

@@ -13,7 +13,7 @@ import com.exhibitflow.identity.repository.UserRepository;
 import com.exhibitflow.identity.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.kafka.core.KafkaTemplate;
+// import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -40,7 +40,7 @@ public class AuthService {
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
-    private final KafkaTemplate<String, Object> kafkaTemplate;
+    // private final KafkaTemplate<String, Object> kafkaTemplate;
 
     @Transactional
     public UserDto register(UserRegistrationDto registrationDto) {
@@ -74,8 +74,7 @@ public class AuthService {
         User savedUser = userRepository.save(user);
         log.info("User registered successfully: {}", savedUser.getUsername());
 
-        // Publish user registration event to Kafka
-        publishUserEvent("USER_REGISTERED", savedUser);
+        // publishUserEvent("USER_REGISTERED", savedUser);
 
         return convertToUserDto(savedUser);
     }
@@ -107,8 +106,7 @@ public class AuthService {
 
         log.info("User logged in successfully: {}", loginRequest.getUsername());
 
-        // Publish login event to Kafka
-        publishAuthEvent("USER_LOGIN", user);
+        // publishAuthEvent("USER_LOGIN", user);
 
         return AuthResponseDto.builder()
                 .accessToken(accessToken)
@@ -167,9 +165,8 @@ public class AuthService {
         
         refreshTokenRepository.deleteByUser(user);
         
-        // Publish logout event to Kafka
-        publishAuthEvent("USER_LOGOUT", user);
-        
+        // publishAuthEvent("USER_LOGOUT", user);
+
         log.info("User logged out successfully: {}", username);
     }
 
@@ -186,36 +183,36 @@ public class AuthService {
         refreshTokenRepository.save(refreshToken);
     }
 
-    private void publishUserEvent(String eventType, User user) {
-        try {
-            Map<String, Object> event = new HashMap<>();
-            event.put("eventType", eventType);
-            event.put("userId", user.getId().toString());
-            event.put("username", user.getUsername());
-            event.put("email", user.getEmail());
-            event.put("timestamp", LocalDateTime.now().toString());
-            
-            kafkaTemplate.send("user-events", event);
-            log.debug("Published user event: {} for user: {}", eventType, user.getUsername());
-        } catch (Exception e) {
-            log.error("Failed to publish user event: {}", eventType, e);
-        }
-    }
+    // private void publishUserEvent(String eventType, User user) {
+    //     try {
+    //         Map<String, Object> event = new HashMap<>();
+    //         event.put("eventType", eventType);
+    //         event.put("userId", user.getId().toString());
+    //         event.put("username", user.getUsername());
+    //         event.put("email", user.getEmail());
+    //         event.put("timestamp", LocalDateTime.now().toString());
+    //
+    //         kafkaTemplate.send("user-events", event);
+    //         log.debug("Published user event: {} for user: {}", eventType, user.getUsername());
+    //     } catch (Exception e) {
+    //         log.error("Failed to publish user event: {}", eventType, e);
+    //     }
+    // }
 
-    private void publishAuthEvent(String eventType, User user) {
-        try {
-            Map<String, Object> event = new HashMap<>();
-            event.put("eventType", eventType);
-            event.put("userId", user.getId().toString());
-            event.put("username", user.getUsername());
-            event.put("timestamp", LocalDateTime.now().toString());
-            
-            kafkaTemplate.send("auth-events", event);
-            log.debug("Published auth event: {} for user: {}", eventType, user.getUsername());
-        } catch (Exception e) {
-            log.error("Failed to publish auth event: {}", eventType, e);
-        }
-    }
+    // private void publishAuthEvent(String eventType, User user) {
+    //     try {
+    //         Map<String, Object> event = new HashMap<>();
+    //         event.put("eventType", eventType);
+    //         event.put("userId", user.getId().toString());
+    //         event.put("username", user.getUsername());
+    //         event.put("timestamp", LocalDateTime.now().toString());
+    //
+    //         kafkaTemplate.send("auth-events", event);
+    //         log.debug("Published auth event: {} for user: {}", eventType, user.getUsername());
+    //     } catch (Exception e) {
+    //         log.error("Failed to publish auth event: {}", eventType, e);
+    //     }
+    // }
 
     private UserDto convertToUserDto(User user) {
         return UserDto.builder()

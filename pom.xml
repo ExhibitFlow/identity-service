@@ -105,12 +105,11 @@
             <artifactId>flyway-database-postgresql</artifactId>
         </dependency>
         
-        <!-- Kafka -->
-        <dependency>
+        <!-- <dependency>
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
-        </dependency>
-        
+        </dependency> -->
+
         <!-- SpringDoc OpenAPI -->
         <dependency>
             <groupId>org.springdoc</groupId>
@@ -138,12 +137,13 @@
             <scope>test</scope>
         </dependency>
         
-        <dependency>
+        <!-- Kafka test dependencies commented out for testing without Kafka integration -->
+        <!-- <dependency>
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka-test</artifactId>
             <scope>test</scope>
-        </dependency>
-        
+        </dependency> -->
+
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
