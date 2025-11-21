@@ -40,29 +40,18 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: identity-service
-    # depends_on:
-    #   kafka:
-    #     condition: service_healthy
     ports:
       - "8080:8080"
+    env_file:
+      - .env
     environment:
-      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
-      DB_USERNAME: ${DB_USERNAME}
-      DB_PASSWORD: ${DB_PASSWORD}
-      # KAFKA_BOOTSTRAP_SERVERS: kafka:9092
       JWT_SECRET: your-super-secure-256-bit-secret-key-for-jwt-tokens-change-in-production
       JWT_EXPIRATION: 86400000
       JWT_REFRESH_EXPIRATION: 604800000
       SERVER_PORT: 8080
-      OAUTH2_ISSUER_URI: ${OAUTH2_ISSUER_URI}
-      OAUTH2_CLIENT_ID: ${OAUTH2_CLIENT_ID}
-      OAUTH2_CLIENT_SECRET: ${OAUTH2_CLIENT_SECRET}
-      OAUTH2_REDIRECT_URIS: ${OAUTH2_REDIRECT_URIS}
-      OAUTH2_SCOPES: ${OAUTH2_SCOPES}
     networks:
       - identity-network
     restart: unless-stopped
-
 
 networks:
   identity-network:
