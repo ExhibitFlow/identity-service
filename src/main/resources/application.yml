@@ -33,6 +33,7 @@ spring:
   flyway:
     enabled: true
     baseline-on-migrate: true
+    validate-on-migrate: false
     locations: classpath:db/migration
     schemas: public
   
@@ -96,6 +97,16 @@ jwt:
   secret: ${JWT_SECRET:your-256-bit-secret-key-change-this-in-production-environment}
   expiration: ${JWT_EXPIRATION:86400000}
   refresh-expiration: ${JWT_REFRESH_EXPIRATION:604800000}
+  # Token content customization
+  include-roles: ${JWT_INCLUDE_ROLES:true}
+  include-permissions: ${JWT_INCLUDE_PERMISSIONS:true}
+  include-user-details: ${JWT_INCLUDE_USER_DETAILS:true}
+  # Algorithm support (RS256 for OAuth2 standard, HS512 for symmetric key)
+  algorithm: ${JWT_ALGORITHM:HS512}
+
+security:
+  # Default role for new user registrations
+  default-role: ${SECURITY_DEFAULT_ROLE:VIEWER}
 
 oauth2:
   issuer-uri: ${OAUTH2_ISSUER_URI}
