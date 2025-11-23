@@ -66,10 +66,10 @@ public class AuthService {
                 .credentialsNonExpired(true)
                 .build();
 
-        // Assign default USER role
-        Role userRole = roleRepository.findByName("USER")
-                .orElseThrow(() -> new ResourceNotFoundException("Default USER role not found"));
-        user.addRole(userRole);
+        // Assign default VIEWER role
+        Role viewerRole = roleRepository.findByName("VIEWER")
+                .orElseThrow(() -> new ResourceNotFoundException("Default VIEWER role not found"));
+        user.addRole(viewerRole);
 
         User savedUser = userRepository.save(user);
         log.info("User registered successfully: {}", savedUser.getUsername());

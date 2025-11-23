@@ -1,10 +1,10 @@
--- Insert default roles
+-- Insert default roles with generic names
 INSERT INTO roles (id, name, description) VALUES
-    (gen_random_uuid(), 'USER', 'Default user role'),
-    (gen_random_uuid(), 'ADMIN', 'Administrator role'),
-    (gen_random_uuid(), 'MODERATOR', 'Moderator role');
+    (gen_random_uuid(), 'VIEWER', 'Can view resources (read-only access)'),
+    (gen_random_uuid(), 'MANAGER', 'Can manage resources (create, read, update)'),
+    (gen_random_uuid(), 'ADMIN', 'Full administrative access');
 
--- Insert default permissions
+-- Insert default permissions with generic resource:action pattern
 INSERT INTO permissions (id, name, description, resource, action) VALUES
     (gen_random_uuid(), 'user:read', 'Read user information', 'user', 'read'),
     (gen_random_uuid(), 'user:write', 'Create and update user information', 'user', 'write'),
@@ -14,27 +14,30 @@ INSERT INTO permissions (id, name, description, resource, action) VALUES
     (gen_random_uuid(), 'role:delete', 'Delete roles', 'role', 'delete'),
     (gen_random_uuid(), 'permission:read', 'Read permission information', 'permission', 'read'),
     (gen_random_uuid(), 'permission:write', 'Create and update permissions', 'permission', 'write'),
-    (gen_random_uuid(), 'permission:delete', 'Delete permissions', 'permission', 'delete');
+    (gen_random_uuid(), 'permission:delete', 'Delete permissions', 'permission', 'delete'),
+    (gen_random_uuid(), 'content:read', 'Read content', 'content', 'read'),
+    (gen_random_uuid(), 'content:write', 'Create and update content', 'content', 'write'),
+    (gen_random_uuid(), 'content:delete', 'Delete content', 'content', 'delete');
 
--- Assign permissions to ADMIN role
+-- Assign all permissions to ADMIN role
 INSERT INTO role_permissions (role_id, permission_id)
 SELECT r.id, p.id
 FROM roles r, permissions p
 WHERE r.name = 'ADMIN';
 
--- Assign limited permissions to USER role
+-- Assign read-only permissions to VIEWER role
 INSERT INTO role_permissions (role_id, permission_id)
 SELECT r.id, p.id
 FROM roles r, permissions p
-WHERE r.name = 'USER'
-AND p.name IN ('user:read');
+WHERE r.name = 'VIEWER'
+AND p.name IN ('user:read', 'role:read', 'permission:read', 'content:read');
 
--- Assign moderate permissions to MODERATOR role
+-- Assign read and write permissions to MANAGER role
 INSERT INTO role_permissions (role_id, permission_id)
 SELECT r.id, p.id
 FROM roles r, permissions p
-WHERE r.name = 'MODERATOR'
-AND p.name IN ('user:read', 'user:write');
+WHERE r.name = 'MANAGER'
+AND p.name IN ('user:read', 'user:write', 'role:read', 'content:read', 'content:write');
 
 -- Insert default admin user (password: admin123)
 -- Password is BCrypt hash of "admin123"

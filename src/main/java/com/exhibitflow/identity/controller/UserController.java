@@ -1,18 +1,21 @@
 package com.exhibitflow.identity.controller;
 
-import com.exhibitflow.identity.dto.UserDto;
+import com.exhibitflow.identity.dto.*;
 import com.exhibitflow.identity.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -63,5 +66,35 @@ public class UserController {
             @RequestParam boolean enabled) {
         UserDto userDto = userService.updateUserStatus(id, enabled);
         return ResponseEntity.ok(userDto);
+    }
+
+
+
+    @PostMapping("/{userId}/roles")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Assign roles to user", description = "Admin assigns multiple roles to a user")
+    public ResponseEntity<UserDto> assignRolesToUser(
+            @PathVariable UUID userId,
+            @Valid @RequestBody AssignRolesRequest request) {
+        UserDto userDto = userService.assignRolesToUser(userId, request);
+        return ResponseEntity.ok(userDto);
+    }
+
+    @DeleteMapping("/{userId}/roles/{roleId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Remove role from user", description = "Admin removes a single role from a user")
+    public ResponseEntity<UserDto> removeRoleFromUser(
+            @PathVariable UUID userId,
+            @PathVariable UUID roleId) {
+        UserDto userDto = userService.removeRoleFromUser(userId, roleId);
+        return ResponseEntity.ok(userDto);
+    }
+
+    @GetMapping("/{userId}/roles")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Get user roles", description = "Admin retrieves all roles assigned to a user")
+    public ResponseEntity<List<RoleResponse>> getUserRoles(@PathVariable UUID userId) {
+        List<RoleResponse> roles = userService.getUserRoles(userId);
+        return ResponseEntity.ok(roles);
     }
 }
