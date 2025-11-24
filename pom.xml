@@ -13,12 +13,13 @@
     
     <groupId>com.exhibitflow</groupId>
     <artifactId>identity-service</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>v1.0.0</version>
     <name>Identity Service</name>
     <description>A secure microservice for authentication and authorization using JWT and OAuth2</description>
-    
+
     <properties>
         <java.version>17</java.version>
+        <spring-cloud.version>2025.0.0</spring-cloud.version>
         <springdoc.version>2.8.4</springdoc.version>
     </properties>
     
@@ -104,7 +105,12 @@
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-database-postgresql</artifactId>
         </dependency>
-        
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+
         <!-- <dependency>
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
@@ -136,13 +142,6 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
-        
-        <!-- Kafka test dependencies commented out for testing without Kafka integration -->
-        <!-- <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka-test</artifactId>
-            <scope>test</scope>
-        </dependency> -->
 
         <dependency>
             <groupId>com.h2database</groupId>
@@ -150,7 +149,19 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <build>
         <plugins>
             <plugin>
