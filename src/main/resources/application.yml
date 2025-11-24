@@ -1,6 +1,6 @@
 spring:
   application:
-    name: identity-service
+    name: IDENTITY-SERVICE
   
   datasource:
     url: ${SPRING_DATASOURCE_URL}
@@ -94,15 +94,13 @@ springdoc:
       email: support@exhibitflow.com
 
 jwt:
-  secret: ${JWT_SECRET:your-256-bit-secret-key-change-this-in-production-environment}
-  expiration: ${JWT_EXPIRATION:86400000}
-  refresh-expiration: ${JWT_REFRESH_EXPIRATION:604800000}
-  # Token content customization
-  include-roles: ${JWT_INCLUDE_ROLES:true}
-  include-permissions: ${JWT_INCLUDE_PERMISSIONS:true}
-  include-user-details: ${JWT_INCLUDE_USER_DETAILS:true}
-  # Algorithm support (RS256 for OAuth2 standard, HS512 for symmetric key)
-  algorithm: ${JWT_ALGORITHM:HS512}
+  secret: "${JWT_SECRET:your-super-secure-256-bit-secret-key-for-jwt-tokens-change-in-production}"
+  expiration: "${JWT_EXPIRATION:86400000}"
+  refresh-expiration: "${JWT_REFRESH_EXPIRATION:604800000}"
+  include-roles: "${JWT_INCLUDE_ROLES:true}"
+  include-permissions: "${JWT_INCLUDE_PERMISSIONS:true}"
+  include-user-details: "${JWT_INCLUDE_USER_DETAILS:true}"
+  algorithm: "${JWT_ALGORITHM:HS512}"
 
 security:
   # Default role for new user registrations
@@ -127,3 +125,10 @@ logging:
   pattern:
     console: '%d{yyyy-MM-dd HH:mm:ss} - %msg%n'
     file: '%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n'
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
