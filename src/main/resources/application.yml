@@ -91,7 +91,6 @@ springdoc:
     version: 1.0.0
     contact:
       name: ExhibitFlow Team
-      email: support@exhibitflow.com
 
 jwt:
   secret: "${JWT_SECRET:your-super-secure-256-bit-secret-key-for-jwt-tokens-change-in-production}"

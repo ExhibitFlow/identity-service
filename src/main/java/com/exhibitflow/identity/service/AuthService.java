@@ -67,8 +67,8 @@ public class AuthService {
                 .build();
 
         // Assign default VIEWER role
-        Role viewerRole = roleRepository.findByName("VIEWER")
-                .orElseThrow(() -> new ResourceNotFoundException("Default VIEWER role not found"));
+        Role viewerRole = roleRepository.findByName("MANAGER")
+                .orElseThrow(() -> new ResourceNotFoundException("Default manager role not found"));
         user.addRole(viewerRole);
 
         User savedUser = userRepository.save(user);
